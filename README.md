@@ -16,7 +16,9 @@ results in a parsed representation of the json object.
 To access the data:
 
 > (get-objects obj)
+
 > (get-value obj 'some-sub-object)
+
 > (get-fields obj 'some-field-name)
 
 Have fun
