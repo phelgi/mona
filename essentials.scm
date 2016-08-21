@@ -42,24 +42,3 @@
                   acc
                   (r (cons x acc) (- m 1))))))
     (r '() n)))
-
-(define (lazy-repeat x)
-  (delay (cons x (list (lazy-repeat x)))))
-
-(define (take n prom)
-  (let ((sforza (lambda(p) (if (promise? p) (force p) (list p)))))
-    (letrec ((r (lambda(acc m)
-                  (if (zero? m)
-                    acc
-                    (r (mapcat (lambda(x) (sforza x)) acc) (- m 1))))))
-      (if (zero? n)
-        '()
-        (but-last (r (sforza prom) n))))))
-
-(define (drop n prom)
-  (let ((sforza (lambda(p) (if (promise? p) (force p) (list p)))))
-    (letrec ((r (lambda(acc m)
-                  (if (zero? m)
-                    acc
-                    (r (cadr (sforza acc)) (- m 1))))))
-      (r prom n))))
