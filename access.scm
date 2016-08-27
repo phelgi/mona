@@ -1,10 +1,10 @@
 (load "mona.scm")
 
-(define (p-add head tail)
+(define (path-add head tail)
   (string->symbol (format #f "~a.~a" (symbol->string head) (symbol->string tail))))
 
-(define (p-const pth . subpths)
-  (reduce (lambda(h t) (p-add h t)) pth subpths))
+(define (path-concat pth . subpths)
+  (reduce (lambda(h t) (path-add h t)) pth subpths))
 
 (define (head-tail lst chr)
   (letrec ((r (lambda(head rst) 
