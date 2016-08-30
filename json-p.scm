@@ -3,6 +3,19 @@
 (define space (sat char-whitespace?))
 (define komma (char #\,))
 
+(define sep-by-1 (lambda (sep)
+                   (lambda (p)
+                     (bind p
+                           (lambda (x) 
+                             (bind (many
+                                     (bind sep
+                                           (lambda (_)
+                                             (bind p
+                                                   (lambda (y)
+                                                     (result y))))))
+                                   (lambda (xs)
+                                     (result (cons x xs)))))))))
+
 (define pair-sep (sep-by-1 (bind (many space)
                                  (lambda(_)
                                    (bind komma

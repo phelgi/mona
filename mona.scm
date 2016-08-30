@@ -67,19 +67,6 @@
 (define many (lambda (p) (plus (non-empty-many p) (result '()))))
 (define many-1 (lambda (p) (non-empty-many p)))
 
-(define sep-by-1 (lambda (sep)
-                   (lambda (p)
-                     (bind p
-                           (lambda (x) 
-                             (bind (many
-                                     (bind sep
-                                           (lambda (_)
-                                             (bind p
-                                                   (lambda (y)
-                                                     (result y))))))
-                                   (lambda (xs)
-                                     (result (cons x xs)))))))))
-
 (define first (lambda (p)
                 (lambda (inp)
                   (let ((x (p inp)))
