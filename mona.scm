@@ -46,16 +46,20 @@
 (define alphanum (plus letter digit))
 
 (define (string-p s)
-  (let ((ps (map char (string->list s))))
-    (lambda (inp)
-      (if (< (string-length inp) (length ps))
-        '()
-        (let* ((mc (substring inp 0 (length ps)))
-               (rst (substring inp (length ps) (string-length inp)))
-               (m (map (lambda (cp c) (cp (string c))) ps (string->list mc))))
-          (if (every? (lambda(x) (not (null? x))) m)
-            (list (cons mc rst))
-            '()))))))
+  (let ((l (string-length s))
+        (mult (lambda (p q)
+                (bind p
+                      (lambda (x)
+                        (bind q
+                              (lambda (y)
+                                (result (string-append
+                                          (if (string? x) x (string x))
+                                          (if (string? y) y (string y)))))))))))
+    (cond
+      ((eq? l 0) '())
+      ((eq? l 1) (bind (char (string-ref s 0)) (lambda(ch) (result (string ch)))))
+      (else (let ((ps (map char (string->list s))))
+              (reduce mult (car ps) (cdr ps)))))))
 
 (define (non-empty-many p)
   (letrec ((many-rec (lambda (acc inp)
