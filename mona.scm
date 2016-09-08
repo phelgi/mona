@@ -18,7 +18,17 @@
                    (list (cons f r))))))
 
 ;; combinators
+(define stack-max 0)
+(define (stack-len)
+  (let ((s (stack-length (make-stack #t))))
+    (if (> s stack-max)
+      (set! stack-max s))))
+
+(define (reset-stack-len)
+  (set! stack-max 0))
+
 (define (bind p f) (lambda (inp)
+                     (stack-len)
                      (let ((vs (p inp)))
                        (if (null? vs)
                          vs
@@ -46,14 +56,16 @@
 (define alphanum (plus letter digit))
 
 (define (string-p s)
-  (let ((l (string-length s))
-        (mult (lambda (p q)
-                (bind p
-                      (lambda (x)
-                        (bind q
-                              (lambda (y)
-                                (result (string-append x (string y))))))))))
-    (reduce mult (result "") (map char (string->list s)))))
+  (let ((ps (map char (string->list s))))
+    (lambda (inp)
+      (if (< (string-length inp) (length ps))
+        '()
+        (let* ((mc (substring inp 0 (length ps)))
+               (rst (substring inp (length ps) (string-length inp)))
+               (m (map (lambda (cp c) (cp (string c))) ps (string->list mc))))
+          (if (every? (lambda(x) (not (null? x))) m)
+            (list (cons mc rst))
+            '()))))))
 
 (define (non-empty-many p)
   (letrec ((many-rec (lambda (acc inp)
