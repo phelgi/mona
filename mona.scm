@@ -52,14 +52,8 @@
                       (lambda (x)
                         (bind q
                               (lambda (y)
-                                (result (string-append
-                                          (if (string? x) x (string x))
-                                          (if (string? y) y (string y)))))))))))
-    (cond
-      ((eq? l 0) '())
-      ((eq? l 1) (bind (char (string-ref s 0)) (lambda(ch) (result (string ch)))))
-      (else (let ((ps (map char (string->list s))))
-              (reduce mult (car ps) (cdr ps)))))))
+                                (result (string-append x (string y))))))))))
+    (reduce mult (result "") (map char (string->list s)))))
 
 (define (non-empty-many p)
   (letrec ((many-rec (lambda (acc inp)
