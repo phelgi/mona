@@ -18,17 +18,7 @@
                    (list (cons f r))))))
 
 ;; combinators
-(define stack-max 0)
-(define (stack-len)
-  (let ((s (stack-length (make-stack #t))))
-    (if (> s stack-max)
-      (set! stack-max s))))
-
-(define (reset-stack-len)
-  (set! stack-max 0))
-
 (define (bind p f) (lambda (inp)
-                     (stack-len)
                      (let ((vs (p inp)))
                        (if (null? vs)
                          vs
