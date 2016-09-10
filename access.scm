@@ -61,9 +61,10 @@
   (let ((v (get-value obj pth)))
     (and (not (list? v)) (pair? v))))
 
-(define (leaf? obj pth)
-  (let ((v (get-value obj pth)))
+(define (leaf? obj pth . args)
+  (let ((v (get-value obj pth))
+        (vec-as-leaf (if (not (null? args)) (car args) #f)))
     (cond
-      ((vector? v) #t)
+      ((vector? v) vec-as-leaf)
       ((pair? v) #f)
       (else #t))))
