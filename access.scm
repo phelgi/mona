@@ -63,8 +63,8 @@
 
 (define (leaf? obj pth . args)
   (let ((v (get-value obj pth))
-        (vec-as-leaf (if (not (null? args)) (car args) #f)))
+        (array-as-leaf (if (not (null? args)) (car args) #f)))
     (cond
-      ((vector? v) vec-as-leaf)
+      ((vector? v) array-as-leaf)
       ((pair? v) #f)
       (else #t))))
