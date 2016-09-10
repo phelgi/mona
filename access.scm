@@ -1,7 +1,7 @@
 (load "mona.scm")
 
 (define (path-add head tail)
-  (string->symbol (format #f "~a.~a" (symbol->string head) (symbol->string tail))))
+  (string->symbol (format #f "~a.~a" head tail)))
 
 (define (path-concat pth . subpths)
   (reduce (lambda(h t) (path-add h t)) pth subpths))
@@ -23,15 +23,17 @@
 
 (define (get-objects obj)
   (if (list? obj)
-    (filter symbol? (map (lambda(x)
-                           (if (and (list? x) (not (null? x)))
-                             (car x)
-                             '())) obj))
+    (map car (filter (lambda(x) (pair? (cdr x))) obj))
     '()))
 
 (define (get-fields obj)
   (if (list? obj)
-    (map car (filter (lambda(x) (and (pair? x) (not (list? x)))) obj))
+    (map car (filter (lambda(x) (and (not (pair? (cdr x))) (not (vector? (cdr x))))) obj))
+    '()))
+
+(define (get-arrays obj)
+  (if (list? obj)
+    (map car (filter (lambda(x) (vector? (cdr x))) obj))
     '()))
 
 (define (get-obj obj symb-or-number)
